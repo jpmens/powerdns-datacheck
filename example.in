@@ -1,0 +1,42 @@
+
+# IDEA: pre-process this with m4 or cpp? Would allow me
+# to #define DOMAIN <regexp> and
+# re-use DOMAIN, e.g. in SOA mname regexp ????? CAREFUL
+
+
+# A names may begin as wildcard
+A:name		^(\*\.)?([a-z][a-z0-9\-]+(\.|\-*\.))+[a-z]{2,6}$
+A:content	@IP
+
+AAAA:name	^(\*\.)?([a-z][a-z0-9\-]+(\.|\-*\.))+[a-z]{2,6}$
+AAAA:content	@IP
+
+SOA:name	^([a-zA-Z][a-zA-Z0-9\-]+(\.|\-*\.))+[a-zA-Z]{2,6}$
+SOA:content	@SOA
+
+SOA:mname	^([a-zA-Z][a-zA-Z0-9\-]+(\.|\-*\.))+[a-zA-Z]{2,6}$
+SOA:rname	^([a-zA-Z][a-zA-Z0-9\-]+(\.|\-*\.))+[a-zA-Z]{2,6}$
+SOA:serial	^\d+$
+SOA:refresh	^\d+$
+SOA:retry	^\d+$
+SOA:expiry	^\d+$
+SOA:minimum	^\d+$
+
+# The SOA:*:{min|max|equals} keys must be unique
+SOA:expire:min		0
+
+# Specifying equals AND min,max will probably not work :)
+
+#SOA:refresh:equals	900
+SOA:refresh:min		600
+SOA:refresh:max		7201
+
+NS:name         ^([a-z][a-z0-9\-]+(\.|\-*\.))+([a-z]{2,6}|xn--[a-z0-9]*$
+NS:content	^([a-zA-Z][a-zA-Z0-9\-]+(\.|\-*\.))+[a-zA-Z]{2,6}$
+
+TXT:content	^".*"$
+
+ptr:name	^(\d+).(\d+){3}.in-addr.arpa$			Valid IPv4 PTR
+ptr:name	^([0-9]\.){32}.ip6.arpa$			Valid IPv6 PTR
+ptr:content	^([a-z][a-z0-9\-]+(\.|\-*\.))+[a-z]{2,6}$	Valid domain name
+
